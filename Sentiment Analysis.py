@@ -4,6 +4,7 @@ import os
 import json
 from nested_lookup import nested_lookup
 from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
@@ -68,3 +69,8 @@ X_train, X_test, y_train, y_test = split_data(tfidf_df, df['sentiment'], 0.3)
 svm = SVC(gamma='auto')
 y_pred = define_run_model(svm, X_train, X_test, y_train)
 check_result(y_test, y_pred)
+
+# handle imbalance data with random forest
+rfc = RandomForestClassifier(n_estimators=1000).fit(X_train, y_train)
+rfc_pred = rfc.predict(X_test)
+check_result(y_test, rfc_pred)
